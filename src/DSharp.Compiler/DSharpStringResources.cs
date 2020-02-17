@@ -42,7 +42,7 @@
         public static readonly string UNSUPPORTED_NESTED_NAMESPACE = "Nested namespaces are not supported.";
         public static readonly string UNSUPPORTED_PARTIAL_TYPE = "Partial types can only be classes, not enumerations or interfaces.";
         public static readonly string UNSUPPORTED_CONSTRUCTOR_OVERLOAD = "Constructor overloads are not supported.";
-        public static readonly string UNSUPPORTED_METHOD_OVERLOAD = "Duplicate-named member. Method overloads are not supported.";
+        public static readonly string DUPLICATED_MEMBER_METHOD = "Duplicated member method.";
         public static readonly string RESERVED_KEYWORD_ON_MEMBER_ERROR = "Invalid member name. Member names should not use keywords.";
         public static readonly string ASSEMBLY_SCRIPT_ATTRIBUTE_MISSING = "You must declare a ScriptAssembly attribute.";
         public static readonly string INVALID_SCRIPT_NAME_FORMAT = " ScriptAssembly attribute referenced an invalid name '{0}'. Script names must only contain letters, numbers, dots or underscores.";

@@ -135,7 +135,7 @@ namespace DSharp.Compiler.Validator
 
                     if (ignoreAttribute == null && memberNames.ContainsKey(name))
                     {
-                        errorHandler.ReportNodeValidationError(DSharpStringResources.UNSUPPORTED_METHOD_OVERLOAD, memberNode);
+                        errorHandler.ReportNodeValidationError(DSharpStringResources.DUPLICATED_MEMBER_METHOD, memberNode);
                     }
 
                     // remember the method overload only if it wasn't ignored

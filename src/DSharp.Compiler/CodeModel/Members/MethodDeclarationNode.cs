@@ -17,6 +17,7 @@ namespace DSharp.Compiler.CodeModel.Members
         private readonly NameNode interfaceType;
         private readonly AtomicNameNode name;
         private ParseNodeList constraints;
+        private bool isOverloadedMethod;
 
         public MethodDeclarationNode(Token token,
                                      ParseNodeList attributes,
@@ -60,7 +61,28 @@ namespace DSharp.Compiler.CodeModel.Members
 
         public override Modifiers Modifiers { get; }
 
-        public override string Name => name.Name;
+        public override string Name
+        {
+            get
+            {
+                if(isOverloadedMethod)
+                {
+                    string parameters = string.Join("_", Parameters.OfType<ParameterNode>().Select(
+                        n =>
+                        {
+                            if(n.Type.Token is IdentifierToken token)
+                            {
+                                return token.Identifier;
+                            }
+
+                            return Token.GetString(n.Type.Token.Type);
+                        }));
+                    return name.Name + "_" + parameters;
+                }
+
+                return name.Name;
+            }
+        }
 
         public ParseNodeList Parameters { get; }
 
@@ -73,5 +95,12 @@ namespace DSharp.Compiler.CodeModel.Members
         internal ParseNodeList Constraints => constraints;
 
         public bool IsGenericMethod => TypeParameters?.Any() ?? false;
+
+        public bool IsOverloadedMethod => isOverloadedMethod;
+
+        public void MarkAsOverloaded()
+        {
+            isOverloadedMethod = true;
+        }
     }
 }

@@ -3,7 +3,9 @@
 // This source code is subject to terms and conditions of the Apache License, Version 2.0.
 //
 
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using DSharp.Compiler.CodeModel;
 using DSharp.Compiler.CodeModel.Attributes;
 using DSharp.Compiler.CodeModel.Expressions;
@@ -1062,6 +1064,27 @@ namespace DSharp.Compiler.Parser
                 }
 
                 type = PeekType();
+            }
+
+            IEnumerable<MethodDeclarationNode> methods = list.OfType<MethodDeclarationNode>();
+
+            var methodsByName = methods.GroupBy(m => m.Name, (name, members) => new
+            {
+                Key = name,
+                Members = members
+            });
+
+            foreach(var groupOfMethods in methodsByName)
+            {
+                if(groupOfMethods.Members.Count() == 1)
+                {
+                    continue;
+                }
+
+                foreach(MethodDeclarationNode node in groupOfMethods.Members)
+                {
+                    node.MarkAsOverloaded();
+                }
             }
 
             return list;
