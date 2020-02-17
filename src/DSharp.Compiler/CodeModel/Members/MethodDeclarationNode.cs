@@ -70,18 +70,54 @@ namespace DSharp.Compiler.CodeModel.Members
                     string parameters = string.Join("_", Parameters.OfType<ParameterNode>().Select(
                         n =>
                         {
-                            if(n.Type.Token is IdentifierToken token)
+                            if (n.Type is GenericNameNode genericNode)
                             {
-                                return token.Identifier;
+                                string genericArguments = string.Join("$", genericNode.TypeArguments.Select(nn =>
+                                {
+                                    //if (nn is GenericNameNode)
+                                    //{
+                                    //    string args = "";
+                                    //    ParseNode node = nn;
+                                    //
+                                    //    while(nn is GenericNameNode genericNameNode)
+                                    //    {
+                                    //        args += genericNameNode.Name;
+                                    //    }
+                                    //}
+
+                                    if (nn is NameNode nameNode)
+                                    {
+                                        return nameNode.Name;
+                                    }
+
+                                    if(nn is TypeNode typeNode)
+                                    {
+                                        return Token.GetString(typeNode.Token.Type);
+                                    }
+
+                                    return nn.ToString();
+                                }));
+                                return GetTypeName(n) + "$" + genericArguments;
                             }
 
-                            return Token.GetString(n.Type.Token.Type);
+                            return GetTypeName(n);
                         }));
+
                     return name.Name + "_" + parameters;
                 }
 
                 return name.Name;
             }
+        }
+
+        private string GetTypeName(ParameterNode node)
+        {
+            if (node.Type.Token is IdentifierToken token)
+            {
+                return token.Identifier;
+            }
+
+            return Token.GetString(node.Type.Token.Type);
         }
 
         public ParseNodeList Parameters { get; }
